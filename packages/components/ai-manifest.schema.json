@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Component Manifest",
+  "description": "描述组件库结构，供 AI 工具读取后自动生成调用代码",
+  "type": "object",
+  "required": ["name", "version", "components"],
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "framework": { "type": "string" },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "category": { "type": "string", "enum": ["custom", "passthrough"] },
+          "description": { "type": "string" },
+          "doc": { "type": "string" },
+          "props": { "type": "array" },
+          "events": { "type": "array" },
+          "slots": { "type": "array" },
+          "exposed": { "type": "array" },
+          "importExample": { "type": "string" }
+        }
+      }
+    }
+  }
+}

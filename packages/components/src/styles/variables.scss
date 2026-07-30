@@ -1,0 +1,45 @@
+// ============================================================================
+// 品牌主题变量 - 第一层：SCSS 编译期变量
+// ----------------------------------------------------------------------------
+// 修改这里会改变所有组件的最终样式（编译期生效，无法运行时切换）。
+// 适合固化品牌色、圆角、间距等不会随用户切换的内容。
+// ============================================================================
+
+// 品牌主色 - 改这里全局生效
+$brand-color-1: #e8f3ff !default;
+$brand-color-2: #b6d4ff !default;
+$brand-color-3: #8ab5ff !default;
+$brand-color-4: #5e96ff !default;
+$brand-color-5: #3677ff !default;
+$brand-color-6: #2b6cff !default; // 主色
+$brand-color-7: #2455e0 !default;
+$brand-color-8: #1d44b3 !default;
+$brand-color-9: #163387 !default;
+$brand-color-10: #0f225c !default;
+
+// 功能色
+$success-color: #2ba471 !default;
+$warning-color: #e8732c !default;
+$error-color: #d54941 !default;
+
+// 文字色
+$text-color-primary: #1a1a1a !default;
+$text-color-secondary: #595959 !default;
+$text-color-placeholder: #8c8c8c !default;
+$text-color-disabled: #bfbfbf !default;
+
+// 边框 / 背景
+$border-color: #d9d9d9 !default;
+$bg-color-page: #f5f5f5 !default;
+$bg-color-container: #ffffff !default;
+
+// 圆角 - 改这里全局生效
+$radius-small: 2px !default;
+$radius-default: 4px !default;
+$radius-large: 8px !default;
+
+// 间距
+$spacing-xs: 4px !default;
+$spacing-sm: 8px !default;
+$spacing-md: 16px !default;
+$spacing-lg: 24px !default;

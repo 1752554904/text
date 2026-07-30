@@ -1,0 +1,92 @@
+{
+  "$schema": "./ai-manifest.schema.json",
+  "name": "@my-tdesign-ui/components",
+  "version": "0.1.0",
+  "description": "基于 tdesign-vue-next 深度定制的 Vue 3 桌面端组件库。包含品牌定制组件 + 透传 tdesign 全部组件。",
+  "framework": "vue3",
+  "peerDependencies": {
+    "vue": "^3.3.0",
+    "tdesign-vue-next": "^1.10.0"
+  },
+  "install": {
+    "note": "本组件库为本地包，使用方需在 package.json 中通过 workspace 或 file: 引入",
+    "importExample": "import { MyButton, MyInput, Button as TButton } from '@my-tdesign-ui/components'\nimport '@my-tdesign-ui/components/style.css'"
+  },
+  "theming": {
+    "layers": [
+      {
+        "name": "SCSS 编译期变量",
+        "file": "src/styles/variables.scss",
+        "purpose": "固化品牌色、圆角、间距。修改后需要重新 build。"
+      },
+      {
+        "name": "CSS 运行时变量",
+        "file": "src/styles/theme.scss",
+        "purpose": "运行时换肤。使用方在 :root 覆盖 --my-* 变量即可，无需重新构建。"
+      },
+      {
+        "name": "tdesign 类覆盖",
+        "file": "src/styles/overrides.scss",
+        "purpose": "把 tdesign 内部类映射到我们的 --my-* CSS 变量。升级 tdesign 时只维护此文件。"
+      }
+    ],
+    "darkMode": "在根节点加 class=\"theme-dark\" 即可启用内置暗色主题（见 theme.scss）"
+  },
+  "components": [
+    {
+      "name": "MyButton",
+      "category": "custom",
+      "description": "基于 tdesign 设计语言二次封装的按钮。简化 API，仅暴露常用 props，样式走 --my-* CSS 变量。",
+      "doc": "docs/components/my-button.md",
+      "props": [
+        { "name": "variant", "type": "'primary' | 'outline' | 'ghost' | 'text'", "default": "'primary'", "description": "视觉变体" },
+        { "name": "size", "type": "'sm' | 'md' | 'lg'", "default": "'md'", "description": "尺寸" },
+        { "name": "disabled", "type": "boolean", "default": "false" },
+        { "name": "loading", "type": "boolean", "default": "false", "description": "加载态，自带旋转动画" },
+        { "name": "block", "type": "boolean", "default": "false", "description": "是否撑满父容器宽度" },
+        { "name": "type", "type": "'button' | 'submit' | 'reset'", "default": "'button'" }
+      ],
+      "events": [
+        { "name": "click", "payload": "MouseEvent", "note": "disabled 或 loading 时不会触发" }
+      ],
+      "slots": [
+        { "name": "default", "description": "按钮文本" }
+      ]
+    },
+    {
+      "name": "MyInput",
+      "category": "custom",
+      "description": "极简风格输入框，支持 v-model。前后缀通过具名插槽提供。",
+      "doc": "docs/components/my-input.md",
+      "vModel": "modelValue: string | number",
+      "props": [
+        { "name": "modelValue", "type": "string | number", "default": "''", "description": "v-model 绑定值" },
+        { "name": "type", "type": "'text' | 'password' | 'number' | 'email' | 'tel'", "default": "'text'" },
+        { "name": "placeholder", "type": "string" },
+        { "name": "disabled", "type": "boolean", "default": "false" },
+        { "name": "readonly", "type": "boolean", "default": "false" },
+        { "name": "maxlength", "type": "number" }
+      ],
+      "events": [
+        { "name": "update:modelValue", "payload": "string" },
+        { "name": "focus", "payload": "FocusEvent" },
+        { "name": "blur", "payload": "FocusEvent" }
+      ],
+      "slots": [
+        { "name": "prefix", "description": "输入框前缀（图标/文本）" },
+        { "name": "suffix", "description": "输入框后缀" }
+      ],
+      "exposed": [
+        { "name": "focus", "signature": "() => void", "description": "编程式聚焦" }
+      ]
+    },
+    {
+      "name": "tdesign 原生组件透传",
+      "category": "passthrough",
+      "description": "tdesign-vue-next 全部组件（Button/Input/Table/Dialog/Form/Select 等）均可直接从本包 import 使用。API 与 tdesign 官方完全一致。",
+      "doc": "https://tdesign.tencent.com/vue-next/overview",
+      "importExample": "import { Button as TButton, Table, Dialog } from '@my-tdesign-ui/components'",
+      "note": "透传组件的样式会被 overrides.scss 覆盖，自动应用品牌色与圆角。"
+    }
+  ]
+}

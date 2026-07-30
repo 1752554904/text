@@ -1,0 +1,23 @@
+{
+  "name": "my-tdesign-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "基于 tdesign-vue-next 深度定制的本地组件库，支持 AI 调用",
+  "scripts": {
+    "dev": "pnpm -C playground dev",
+    "build": "pnpm -C packages/components build",
+    "build:playground": "pnpm -C playground build",
+    "preview": "pnpm -C playground preview",
+    "gen:manifest": "node scripts/gen-ai-manifest.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=9"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "@parcel/watcher"]
+  }
+}
