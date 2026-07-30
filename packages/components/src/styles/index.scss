@@ -1,0 +1,4 @@
+// 样式总入口 - 使用方只需引入一次 `import '@my-tdesign-ui/components/style.css'`
+@use 'variables' as *;
+@use 'theme';
+@use 'overrides';

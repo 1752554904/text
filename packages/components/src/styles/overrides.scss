@@ -1,0 +1,55 @@
+// ============================================================================
+// 主题覆盖样式 - 直接覆盖 tdesign 内部类
+// ----------------------------------------------------------------------------
+// 这里通过优先级覆盖 tdesign-vue-next 默认样式，把品牌色、圆角映射到我们的 CSS 变量。
+// 修改后无需改 tdesign 源码，升级 tdesign 时只维护这个文件。
+// ============================================================================
+
+// Button 主题覆盖
+.t-button--theme-primary {
+  background-color: var(--my-brand-color);
+  border-color: var(--my-brand-color);
+
+  &:hover:not(.t-is-disabled) {
+    background-color: var(--my-brand-color-hover);
+    border-color: var(--my-brand-color-hover);
+  }
+
+  &:active:not(.t-is-disabled) {
+    background-color: var(--my-brand-color-active);
+    border-color: var(--my-brand-color-active);
+  }
+
+  &.t-is-disabled {
+    background-color: var(--my-brand-color-disabled);
+    border-color: var(--my-brand-color-disabled);
+  }
+}
+
+// 圆角统一映射
+.t-button {
+  border-radius: var(--my-radius-default);
+}
+
+// Input 主题覆盖
+.t-input {
+  border-radius: var(--my-radius-default);
+
+  .t-input__inner {
+    color: var(--my-text-color-primary);
+
+    &::placeholder {
+      color: var(--my-text-color-placeholder);
+    }
+  }
+
+  &.t-input--focused {
+    border-color: var(--my-brand-color);
+    box-shadow: 0 0 0 2px rgba(43, 108, 255, 0.2);
+  }
+}
+
+// Card 圆角
+.t-card {
+  border-radius: var(--my-radius-large);
+}

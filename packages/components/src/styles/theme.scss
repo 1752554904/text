@@ -1,0 +1,57 @@
+// ============================================================================
+// CSS 变量主题 - 第二层：运行时可覆盖的 CSS 变量
+// ----------------------------------------------------------------------------
+// 这些变量暴露给运行时，使用方可以在页面级用以下方式覆盖：
+//
+//   :root {
+//     --my-brand-color: #ff6600;        /* 覆盖主色 */
+//     --my-radius-default: 12px;        /* 覆盖圆角 */
+//   }
+//
+// 实现「运行时换肤 / 暗色主题 / A/B 测试」无需重新构建。
+// ============================================================================
+@use 'variables' as *;
+
+:root {
+  // 主色（运行时可覆盖）
+  --my-brand-color: #{$brand-color-6};
+  --my-brand-color-hover: #{$brand-color-5};
+  --my-brand-color-active: #{$brand-color-7};
+  --my-brand-color-disabled: #{$brand-color-3};
+
+  // 功能色
+  --my-success-color: #{$success-color};
+  --my-warning-color: #{$warning-color};
+  --my-error-color: #{$error-color};
+
+  // 文字
+  --my-text-color-primary: #{$text-color-primary};
+  --my-text-color-secondary: #{$text-color-secondary};
+  --my-text-color-placeholder: #{$text-color-placeholder};
+  --my-text-color-disabled: #{$text-color-disabled};
+
+  // 边框 / 背景
+  --my-border-color: #{$border-color};
+  --my-bg-color-page: #{$bg-color-page};
+  --my-bg-color-container: #{$bg-color-container};
+
+  // 圆角
+  --my-radius-small: #{$radius-small};
+  --my-radius-default: #{$radius-default};
+  --my-radius-large: #{$radius-large};
+
+  // 间距
+  --my-spacing-xs: #{$spacing-xs};
+  --my-spacing-sm: #{$spacing-sm};
+  --my-spacing-md: #{$spacing-md};
+  --my-spacing-lg: #{$spacing-lg};
+}
+
+// 暗色主题示例：使用方在根节点加 .theme-dark 即可切换
+.theme-dark {
+  --my-text-color-primary: #e8e8e8;
+  --my-text-color-secondary: #bfbfbf;
+  --my-bg-color-page: #1a1a1a;
+  --my-bg-color-container: #262626;
+  --my-border-color: #3a3a3a;
+}
