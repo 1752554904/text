@@ -1,0 +1,55 @@
+/**
+ * 公司主题 Token
+ *
+ * TDesign 通过 CSS 变量（--td-* 前缀）驱动主题。
+ * 这里只覆盖关键变量，将默认的 TDesign 蓝替换为公司品牌色。
+ *
+ * 完整调色板建议用 TDesign 官方主题生成器产出后替换：
+ * https://tdesign.tencent.com/vue-next/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
+ */
+:root {
+  /* ---- 品牌主色：indigo，替换默认 #0052D9 ---- */
+  --td-brand-color: #4f46e5;
+  --td-brand-color-hover: #4338ca;
+  --td-brand-color-active: #3730a3;
+  --td-brand-color-disabled: #a5b4fc;
+  --td-brand-color-focus: #4f46e5;
+  --td-brand-color-light: #eef2ff;
+  --td-brand-color-light-active: #e0e7ff;
+
+  /* 浅色背景梯度（用于 tag / 选中态等） */
+  --td-brand-color-1: #eef2ff;
+  --td-brand-color-2: #e0e7ff;
+  --td-brand-color-3: #c7d2fe;
+  --td-brand-color-4: #a5b4fc;
+  --td-brand-color-5: #818cf8;
+  --td-brand-color-6: #6366f1;
+  --td-brand-color-7: #4f46e5;
+  --td-brand-color-8: #4338ca;
+  --td-brand-color-9: #3730a3;
+  --td-brand-color-10: #312e81;
+
+  /* ---- 功能色 ---- */
+  --td-success-color: #16a34a;
+  --td-success-color-1: #dcfce7;
+  --td-success-color-2: #bbf7d0;
+
+  --td-warning-color: #d97706;
+  --td-warning-color-1: #fef3c7;
+  --td-warning-color-2: #fde68a;
+
+  --td-error-color: #dc2626;
+  --td-error-color-1: #fee2e2;
+  --td-error-color-2: #fecaca;
+
+  /* ---- 圆角（更圆润的公司风格）---- */
+  --td-radius-small: 4px;
+  --td-radius-default: 6px;
+  --td-radius-large: 10px;
+  --td-radius-round: 999px;
+  --td-radius-circle: 50%;
+
+  /* ---- 字体族：接入公司字体 ---- */
+  --td-font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei',
+    'Helvetica Neue', Helvetica, Arial, sans-serif;
+}

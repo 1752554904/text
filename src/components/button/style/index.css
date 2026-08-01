@@ -1,0 +1,5 @@
+/**
+ * Button 组件级样式覆盖示例
+ * 优先通过主题 Token（src/theme/tokens.css）调整颜色，
+ * 仅在 Token 覆盖不了时才在这里写组件级规则。
+ */

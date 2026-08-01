@@ -1,0 +1,49 @@
+{
+  "name": "my-vue-ui",
+  "version": "0.1.0",
+  "description": "公司内部 Vue 3 组件库，基于 TDesign 二次开发",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/my-vue-ui.umd.cjs",
+  "module": "./dist/my-vue-ui.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/my-vue-ui.js",
+      "require": "./dist/my-vue-ui.umd.cjs"
+    },
+    "./style": "./dist/style.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:docs": "vitepress build docs",
+    "docs": "vitepress dev docs",
+    "preview-docs": "vitepress preview docs",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "peerDependencies": {
+    "tdesign-vue-next": ">=1.10.0",
+    "vue": ">=3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@vitejs/plugin-vue": "^5.1.0",
+    "tdesign-vue-next": "^1.10.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0",
+    "vite-plugin-dts": "^4.0.0",
+    "vitepress": "^1.3.0",
+    "vue": "^3.5.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
