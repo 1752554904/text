@@ -75,9 +75,16 @@ export class SceneManager {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    // -------- Scene --------
+    // -------- Scene · 雾/色调直取 tellux.cyanfish.site 同款深蓝大气 --------
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x0a1428, 0.00018);
+    // Tellux 同款：近景浅蓝雾 → 高空向太空深蓝过渡
+    this.scene.fog = new THREE.FogExp2(0x1a3255, 0.00012);
+    // tellux 同款天空色（低海拔蓝，高海拔黑）用 background lerp
+    this.scene.background = new THREE.Color(0x1e3a66);
+    (this.scene as THREE.Scene & { userData: { skyLow?: THREE.Color; skyHigh?: THREE.Color } }).userData.skyLow =
+      new THREE.Color(0x1e3a66);
+    (this.scene as THREE.Scene & { userData: { skyLow?: THREE.Color; skyHigh?: THREE.Color } }).userData.skyHigh =
+      new THREE.Color(0x02030a);
 
     // -------- Camera --------
     this.camera = new THREE.PerspectiveCamera(55, this.width / this.height, 0.1, 1e7);
@@ -125,7 +132,7 @@ export class SceneManager {
   }
 
   /**
-   * 更新相机姿态
+   * 更新相机姿态（顺带按海拔过渡天空色 — tellux 同款近蓝远黑）
    * @param rocketWorldPos 火箭世界坐标
    * @param rocketForward 火箭前端方向（单位向量，指向上）
    * @param dt 帧间秒
@@ -135,6 +142,16 @@ export class SceneManager {
     rocketForward: THREE.Vector3,
     dt: number
   ) {
+    // Tellux 同款：按火箭/相机高度把天空色从浅蓝 lerp 到纯黑
+    const camAlt = Math.max(rocketWorldPos.y, this.camera.position.y);
+    const ud = this.scene.userData as { skyLow?: THREE.Color; skyHigh?: THREE.Color };
+    if (ud.skyLow && ud.skyHigh && (this.scene.background as any).isColor) {
+      const t = THREE.MathUtils.smoothstep(camAlt, 12000, 90000);
+      (this.scene.background as THREE.Color).lerpColors(ud.skyLow, ud.skyHigh, t);
+      if ((this.scene.fog as any).isFogExp2) {
+        (this.scene.fog as THREE.FogExp2).color.lerpColors(ud.skyLow, ud.skyHigh, t);
+      }
+    }
     switch (this.viewMode) {
       case 'follow': {
         // 在火箭后上方跟踪 + 缓动插值

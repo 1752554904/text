@@ -95,7 +95,7 @@ async function boot() {
     return;
   }
 
-  setLoadingUI(0.05, '生成地形/发射台/星空环境...');
+  setLoadingUI(0.05, '生成地形/发射台/星空环境 (加载 tellux 原资源)...');
   const launchSite = new LaunchSite(sceneMgr.scene);
 
   setLoadingUI(0.08, '初始化箭体加载器...');
@@ -106,6 +106,13 @@ async function boot() {
 
   setLoadingUI(0.12, '校准轨道预测曲线...');
   const trajectory = new TrajectoryLine(sceneMgr.scene);
+
+  setLoadingUI(0.14, '等待地形/星空贴图 (tellux.cyanfish.site 原资源) 加载完毕...');
+  try {
+    await launchSite.ready();
+  } catch (e) {
+    console.warn('[boot] launchSite tellux 资源加载失败（已 fallback）:', e);
+  }
 
   setLoadingUI(0.15, '开始加载 CZ-6A 箭体模型 (14MB) — 首次加载需下载...');
   try {
