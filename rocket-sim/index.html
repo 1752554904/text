@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CZ-6A 长征六号甲 · 火箭拟真发射系统</title>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="viewport"></canvas>
+
+      <!-- ============ 顶部控制栏 ============ -->
+      <div id="top-bar" class="glass">
+        <div class="brand">
+          <div class="brand-logo">🚀</div>
+          <div class="brand-text">
+            <div class="brand-title">CZ-6A FLIGHT SIMULATION</div>
+            <div class="brand-sub">长征六号甲 · 遥测控制台 v1.0</div>
+          </div>
+        </div>
+        <div class="top-controls">
+          <button id="btn-launch" class="btn btn-primary">
+            <span class="btn-icon">🔥</span>
+            <span class="btn-label">点火发射</span>
+          </button>
+          <button id="btn-pause" class="btn btn-secondary" disabled>
+            <span class="btn-icon">⏸</span>
+            <span class="btn-label">暂停</span>
+          </button>
+          <button id="btn-reset" class="btn btn-secondary">
+            <span class="btn-icon">↺</span>
+            <span class="btn-label">重置</span>
+          </button>
+          <div class="speed-group">
+            <span class="speed-label">速度</span>
+            <button class="speed-btn" data-speed="0.5">×0.5</button>
+            <button class="speed-btn active" data-speed="1">×1</button>
+            <button class="speed-btn" data-speed="2">×2</button>
+            <button class="speed-btn" data-speed="4">×4</button>
+          </div>
+          <div class="view-group">
+            <span class="view-label">视角</span>
+            <button class="view-btn active" data-view="follow">跟随</button>
+            <button class="view-btn" data-view="orbital">轨道</button>
+            <button class="view-btn" data-view="pad">发射场</button>
+            <button class="view-btn" data-view="free">自由</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 左侧 遥测数据面板 ============ -->
+      <div id="telemetry-panel" class="glass">
+        <div class="panel-header">
+          <span class="panel-dot"></span>
+          <span class="panel-title">遥测数据 · TELEMETRY</span>
+          <span id="mission-timer" class="mission-timer">T+00:00.0</span>
+        </div>
+        <div class="panel-body">
+          <div class="tm-row">
+            <div class="tm-label">阶段 PHASE</div>
+            <div id="tm-phase" class="tm-value tm-phase">待命</div>
+          </div>
+          <div class="tm-meter">
+            <div class="tm-meter-label">
+              <span>高度 ALTITUDE</span>
+              <span id="tm-alt-val">0 km</span>
+            </div>
+            <div class="tm-meter-bar"><div id="tm-alt-bar" class="tm-meter-fill alt"></div></div>
+          </div>
+          <div class="tm-meter">
+            <div class="tm-meter-label">
+              <span>速度 VELOCITY</span>
+              <span id="tm-vel-val">0 m/s</span>
+            </div>
+            <div class="tm-meter-bar"><div id="tm-vel-bar" class="tm-meter-fill vel"></div></div>
+          </div>
+          <div class="tm-meter">
+            <div class="tm-meter-label">
+              <span>加速度 G-LOAD</span>
+              <span id="tm-g-val">0.0 G</span>
+            </div>
+            <div class="tm-meter-bar"><div id="tm-g-bar" class="tm-meter-fill g"></div></div>
+          </div>
+          <div class="tm-grid">
+            <div class="tm-cell">
+              <div class="tm-cell-label">质量 MASS</div>
+              <div id="tm-mass" class="tm-cell-value">530,000 kg</div>
+            </div>
+            <div class="tm-cell">
+              <div class="tm-cell-label">马赫 MACH</div>
+              <div id="tm-mach" class="tm-cell-value">0.00</div>
+            </div>
+            <div class="tm-cell">
+              <div class="tm-cell-label">俯仰 PITCH</div>
+              <div id="tm-pitch" class="tm-cell-value">90.0°</div>
+            </div>
+            <div class="tm-cell">
+              <div class="tm-cell-label">推力 THROTTLE</div>
+              <div id="tm-throttle" class="tm-cell-value">0%</div>
+            </div>
+            <div class="tm-cell">
+              <div class="tm-cell-label">航向 HDG</div>
+              <div id="tm-heading" class="tm-cell-value">115°</div>
+            </div>
+            <div class="tm-cell">
+              <div class="tm-cell-label">下点 D/L</div>
+              <div id="tm-downrange" class="tm-cell-value">0 km</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 飞行事件时间线 -->
+        <div class="timeline-wrap">
+          <div class="timeline-title">
+            <span>✈ 飞行事件 · FLIGHT EVENTS</span>
+            <span id="timeline-status">12 / 12 待执行</span>
+          </div>
+          <div id="flight-timeline" class="flight-timeline"></div>
+        </div>
+      </div>
+
+      <!-- ============ 加载提示 ============ -->
+      <div id="loading-screen" class="loading-screen">
+        <div class="loading-core">
+          <div class="loading-ring"></div>
+          <div class="loading-text">
+            <div class="loading-title">CZ-6A SYSTEM INITIALIZING</div>
+            <div class="loading-sub" id="loading-sub">正在载入飞行软件...</div>
+            <div class="loading-bar-bg">
+              <div class="loading-bar-fg" id="loading-bar"></div>
+            </div>
+            <div class="loading-percent" id="loading-percent">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右下角提示 -->
+      <div id="hint-box" class="glass hint-box">
+        <div>🖱 左键拖拽：旋转视角 &nbsp;|&nbsp; 滚轮：缩放 &nbsp;|&nbsp; 右键：平移</div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
