@@ -79,7 +79,7 @@ export class RocketModel {
     const loader = new GLTFLoader();
     onProgress(0.02);
     const glb = await loader.loadAsync(
-      `${import.meta.env.BASE_URL}models/CZ-6A.glb`,
+      `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '')}/models/CZ-6A.glb`,
       (xhr) => {
         if (xhr.total) onProgress(0.02 + 0.9 * (xhr.loaded / xhr.total));
       }

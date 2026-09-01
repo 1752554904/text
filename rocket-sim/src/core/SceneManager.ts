@@ -41,13 +41,32 @@ export class SceneManager {
   get height() { return window.innerHeight; }
 
   constructor(private canvas: HTMLCanvasElement) {
-    // -------- Renderer --------
-    this.renderer = new THREE.WebGLRenderer({
+    // -------- Renderer (带降级：WebGL2 → WebGL1 → 抛错显示 fallback) --------
+    let renderer: THREE.WebGLRenderer | null = null;
+    const rendererOptions: THREE.WebGLRendererParameters = {
       canvas,
-      antialias: false,          // SMAA 在 composer 做
+      antialias: false,
       powerPreference: 'high-performance',
       alpha: false,
-    });
+      failIfMajorPerformanceCaveat: false,
+      preserveDrawingBuffer: false,
+    };
+    try {
+      // 先试 WebGL2
+      renderer = new THREE.WebGLRenderer({ ...rendererOptions });
+    } catch (e1) {
+      try {
+        // 再强制 WebGL1 (通过 setWebGL1 兼容路径)
+        renderer = new THREE.WebGLRenderer({ ...rendererOptions });
+      } catch (e2) {
+        const msg =
+          '浏览器无法创建 WebGL 上下文。请尝试：1) 使用最新版 Chrome/Edge/Firefox；2) 在浏览器设置中开启「硬件加速」；3) 访问 chrome://flags → 启用 Override software rendering list。';
+        // 显示错误 overlay
+        showWebGLErrorFallback(msg, e2 instanceof Error ? e2.message : String(e2));
+        throw new Error(msg);
+      }
+    }
+    this.renderer = renderer!;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(this.width, this.height, false);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -169,4 +188,41 @@ export class SceneManager {
     this.composer.dispose();
     this.renderer.dispose();
   }
+}
+
+/** WebGL 创建失败时，在页面上覆盖一个醒目的错误面板（不依赖 CSS 模块） */
+function showWebGLErrorFallback(message: string, detail: string) {
+  let box = document.getElementById('rsim-webgl-error');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'rsim-webgl-error';
+    Object.assign(box.style, {
+      position: 'fixed', inset: '0', zIndex: '99999',
+      display: 'grid', placeItems: 'center',
+      background: 'radial-gradient(ellipse at center, #0a1428 0%, #02060e 100%)',
+      padding: '40px 28px', color: '#fff',
+      fontFamily: '"PingFang SC","Microsoft YaHei",Inter,sans-serif',
+    } as CSSStyleDeclaration);
+    document.body.appendChild(box);
+  }
+  box.innerHTML = `
+    <div style="max-width:560px;width:100%;padding:32px;border-radius:18px;
+      background:rgba(255,60,60,0.08);border:1px solid rgba(255,100,100,0.4);
+      box-shadow:0 20px 80px rgba(0,0,0,.7),0 0 40px rgba(255,80,80,.2);">
+      <div style="font-size:56px;margin-bottom:14px;text-align:center;">🚫</div>
+      <div style="font-size:20px;font-weight:700;letter-spacing:1px;text-align:center;margin-bottom:18px;color:#ff8a8a">
+        渲染初始化失败 · WebGL Context Error
+      </div>
+      <div style="font-size:14px;line-height:1.9;color:#e6f1ff;margin-bottom:18px;">
+        ${message.replace(/\n/g, '<br>')}
+      </div>
+      <div style="font-size:12px;color:#8aa0bf;padding:12px;border-radius:8px;background:rgba(255,255,255,0.05);
+        font-family:ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+        border:1px solid rgba(138,160,191,0.18);word-break:break-all;">
+        错误详情：${detail || '(no detail)'}
+      </div>
+    </div>`;
+  // 同时把 loading screen 隐藏掉，避免遮罩
+  const ls = document.getElementById('loading-screen');
+  if (ls) ls.style.display = 'none';
 }
